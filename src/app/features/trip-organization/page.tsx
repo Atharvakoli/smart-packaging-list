@@ -1,7 +1,7 @@
 export default function TripOrganizationPage() {
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 text-center">Trip Organization</h1>
+      <h1 className="text-4xl font-bold mb-12 text-center">Trip Organization</h1>
       <div className="max-w-3xl mx-auto space-y-6">
         <p className="text-gray-600">
           SmartPack's Trip Organization feature helps you stay on top of your travel plans and packing needs:

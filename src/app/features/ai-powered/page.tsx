@@ -1,7 +1,7 @@
 export default function AIPoweredPage() {
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 text-center">AI-Powered Recommendations</h1>
+      <h1 className="text-4xl font-bold mb-12 text-center">AI-Powered Recommendations</h1>
       <div className="max-w-3xl mx-auto space-y-6">
         <p className="text-gray-600">
           SmartPack leverages cutting-edge artificial intelligence to provide you with the best packing recommendations.

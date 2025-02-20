@@ -1,7 +1,12 @@
+import Link from "next/link";
+
 export function FeatureCards() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-      <div className="p-6 bg-white rounded-lg border shadow-sm">
+      <Link
+        href="/features/weather-integration"
+        className="p-6 bg-white rounded-lg border shadow-sm"
+      >
         <div className="mb-4">
           <svg
             className="w-8 h-8 text-blue-600"
@@ -18,11 +23,17 @@ export function FeatureCards() {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold mb-2">Weather-Based</h3>
-        <p className="text-gray-600">Get suggestions based on real-time weather forecast at your destination</p>
-      </div>
+        <h3 className="text-lg font-semibold mb-2">Weather Integration</h3>
+        <p className="text-gray-600">
+          Get suggestions based on real-time weather forecast at your
+          destination
+        </p>
+      </Link>
 
-      <div className="p-6 bg-white rounded-lg border shadow-sm">
+      <Link
+        href="/features/smart-lists"
+        className="p-6 bg-white rounded-lg border shadow-sm"
+      >
         <div className="mb-4">
           <svg
             className="w-8 h-8 text-blue-600"
@@ -40,10 +51,15 @@ export function FeatureCards() {
           </svg>
         </div>
         <h3 className="text-lg font-semibold mb-2">Smart Lists</h3>
-        <p className="text-gray-600">Customized packing lists based on your activities and preferences</p>
-      </div>
+        <p className="text-gray-600">
+          Customized packing lists based on your activities and preferences
+        </p>
+      </Link>
 
-      <div className="p-6 bg-white rounded-lg border shadow-sm">
+      <Link
+        href="/features/ai-powered"
+        className="p-6 bg-white rounded-lg border shadow-sm"
+      >
         <div className="mb-4">
           <svg
             className="w-8 h-8 text-blue-600"
@@ -61,9 +77,10 @@ export function FeatureCards() {
           </svg>
         </div>
         <h3 className="text-lg font-semibold mb-2">AI Powered</h3>
-        <p className="text-gray-600">Continuously improving suggestions based on user feedback</p>
-      </div>
+        <p className="text-gray-600">
+          Continuously improving suggestions based on user feedback
+        </p>
+      </Link>
     </div>
-  )
+  );
 }
-

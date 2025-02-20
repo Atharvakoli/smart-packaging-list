@@ -1,7 +1,7 @@
 export default function SmartListsPage() {
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 text-center">Smart Lists</h1>
+      <h1 className="text-4xl font-bold mb-12 text-center">Smart Lists</h1>
       <div className="max-w-3xl mx-auto space-y-6">
         <p className="text-gray-600">
           SmartPack's Smart Lists feature revolutionizes the way you pack for your trips. Here's what makes our lists so
