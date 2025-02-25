@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,30 +10,55 @@ export type Traveler = {
   age: number;
 };
 
-export type Trip = {
-  destination: string;
-  travelers: Traveler[];
+export type Destination = {
+  location: string;
   startDate: Date | null;
   endDate: Date | null;
+};
+
+export type Trip = {
+  destinations: Destination[];
+  travelers: Traveler[];
   activityType: string;
 };
 
 type TripPlannerFormProps = {
-  savedTrips: Trip[];
-  setSavedTrips: React.Dispatch<React.SetStateAction<Trip[]>>;
+  onSaveTrip: (trip: Trip) => void;
 };
 
-export function TripPlannerForm({
-  savedTrips,
-  setSavedTrips,
-}: TripPlannerFormProps) {
-  const [destination, setDestination] = useState("");
+export function TripPlannerForm({ onSaveTrip }: TripPlannerFormProps) {
+  const [destinations, setDestinations] = useState<Destination[]>([
+    { location: "", startDate: null, endDate: null },
+  ]);
   const [travelers, setTravelers] = useState<Traveler[]>([
     { gender: "", age: 0 },
   ]);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const [activityType, setActivityType] = useState("");
+
+  const handleAddDestination = () => {
+    setDestinations([
+      ...destinations,
+      { location: "", startDate: null, endDate: null },
+    ]);
+  };
+
+  const handleRemoveDestination = (index: number) => {
+    const updatedDestinations = destinations.filter((_, i) => i !== index);
+    setDestinations(updatedDestinations);
+  };
+
+  const handleDestinationChange = (
+    index: number,
+    field: keyof Destination,
+    value: string | Date | null
+  ) => {
+    const updatedDestinations = [...destinations];
+    updatedDestinations[index] = {
+      ...updatedDestinations[index],
+      [field]: value,
+    };
+    setDestinations(updatedDestinations);
+  };
 
   const handleAddTraveler = () => {
     setTravelers([...travelers, { gender: "", age: 0 }]);
@@ -58,40 +82,87 @@ export function TripPlannerForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const newTrip: Trip = {
-      destination,
+      destinations,
       travelers,
-      startDate,
-      endDate,
       activityType,
     };
-    setSavedTrips([...savedTrips, newTrip]);
+    onSaveTrip(newTrip);
     // Reset form
-    setDestination("");
+    setDestinations([{ location: "", startDate: null, endDate: null }]);
     setTravelers([{ gender: "", age: 0 }]);
-    setStartDate(null);
-    setEndDate(null);
     setActivityType("");
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-sm border">
       <form className="space-y-6" onSubmit={handleSubmit}>
-        <div className="space-y-2">
-          <label
-            htmlFor="destination"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Destination
+        <div className="space-y-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Destinations
           </label>
-          <input
-            id="destination"
-            type="text"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            placeholder="Enter city or location"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-            required
-          />
+          {destinations.map((destination, index) => (
+            <div
+              key={index}
+              className="space-y-2 p-4 border border-gray-200 rounded-lg"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium">Destination {index + 1}</h3>
+                {index > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveDestination(index)}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              <input
+                type="text"
+                value={destination.location}
+                onChange={(e) =>
+                  handleDestinationChange(index, "location", e.target.value)
+                }
+                placeholder="Enter city or location"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                required
+              />
+              <div className="flex space-x-2">
+                <DatePicker
+                  selected={destination.startDate}
+                  onChange={(date) =>
+                    handleDestinationChange(index, "startDate", date)
+                  }
+                  selectsStart
+                  startDate={destination.startDate}
+                  endDate={destination.endDate}
+                  placeholderText="Start date"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                  required
+                />
+                <DatePicker
+                  selected={destination.endDate}
+                  onChange={(date) =>
+                    handleDestinationChange(index, "endDate", date)
+                  }
+                  selectsEnd
+                  startDate={destination.startDate}
+                  endDate={destination.endDate}
+                  minDate={destination.startDate}
+                  placeholderText="End date"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                  required
+                />
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={handleAddDestination}
+            className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800"
+          >
+            + Add Destination
+          </button>
         </div>
 
         <div className="space-y-4">
@@ -148,52 +219,22 @@ export function TripPlannerForm({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Travel Dates
-            </label>
-            <div className="flex space-x-2">
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                selectsStart
-                startDate={startDate}
-                endDate={endDate}
-                placeholderText="Start date"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                required
-              />
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                selectsEnd
-                startDate={startDate}
-                endDate={endDate}
-                minDate={startDate}
-                placeholderText="End date"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                required
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <label
-              htmlFor="activityType"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Activity Type
-            </label>
-            <input
-              id="activityType"
-              type="text"
-              value={activityType}
-              onChange={(e) => setActivityType(e.target.value)}
-              placeholder="Enter activity type"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-              required
-            />
-          </div>
+        <div className="space-y-2">
+          <label
+            htmlFor="activityType"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Activity Type
+          </label>
+          <input
+            id="activityType"
+            type="text"
+            value={activityType}
+            onChange={(e) => setActivityType(e.target.value)}
+            placeholder="Enter activity type"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+            required
+          />
         </div>
 
         <button

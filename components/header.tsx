@@ -30,6 +30,9 @@ export function Header() {
           <Link href="/features" className="text-gray-600 hover:text-gray-900">
             Features
           </Link>
+          <Link href="/add-trips" className="text-gray-600 hover:text-gray-900">
+            Add Trips
+          </Link>
           <Link
             href="/how-it-works"
             className="text-gray-600 hover:text-gray-900"

@@ -1,17 +1,10 @@
-export type Traveler = {
-  gender: string;
-  age: number;
+import type { Trip } from "@/components/trip-planner-form";
+
+type TripsProps = {
+  savedTrips: Trip[];
 };
 
-export type Trip = {
-  destination: string;
-  travelers: Traveler[];
-  startDate: Date | null;
-  endDate: Date | null;
-  activityType: string;
-};
-
-export function Trips({ savedTrips }: { savedTrips: Trip[] }) {
+export function Trips({ savedTrips }: TripsProps) {
   if (savedTrips.length === 0) {
     return null;
   }
@@ -28,14 +21,21 @@ export function Trips({ savedTrips }: { savedTrips: Trip[] }) {
             className="bg-blue-100 border border-gray-300 rounded-2xl shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl p-6"
           >
             <h3 className="text-xl font-semibold text-gray-800 mb-2 bg-blue-200 p-2 rounded">
-              {trip.destination.toUpperCase()}
+              Trip {index + 1}
             </h3>
-            <p className="text-sm text-gray-600 mb-3 bg-yellow-100 p-2 rounded">
-              <span className="font-medium">Activity:</span> {trip.activityType}
-            </p>
+            <div className="mb-3 bg-yellow-100 p-2 rounded">
+              <p className="text-sm font-medium text-gray-700 mb-1">
+                Destinations:
+              </p>
+              {trip.destinations.map((dest, i) => (
+                <p key={i} className="text-sm text-gray-600">
+                  {dest.location}: {dest.startDate?.toDateString()} -{" "}
+                  {dest.endDate?.toDateString()}
+                </p>
+              ))}
+            </div>
             <p className="text-sm text-gray-600 mb-3 bg-green-100 p-2 rounded">
-              <span className="font-medium">Dates:</span>{" "}
-              {trip.startDate?.toDateString()} - {trip.endDate?.toDateString()}
+              <span className="font-medium">Activity:</span> {trip.activityType}
             </p>
             <div className="mt-4 bg-purple-100 p-2 rounded">
               <p className="text-sm font-medium text-gray-700 mb-2">

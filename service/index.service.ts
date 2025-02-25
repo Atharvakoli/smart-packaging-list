@@ -25,9 +25,18 @@ export function formatError(error: ErrorWithMessage): string {
     : JSON.stringify(error.message);
 }
 
-export async function weather(location: string) {
-  const weather = await axiosInstanceForWeather.get(
-    `/${location}?key=${process.env.MET_OFFICE_API_KEY}`
+export async function currentWeather(location: string) {
+  const weather = axiosInstanceForWeather.get(
+    `/weather/?q=${location}&appid=${process.env.OPEN_WEATHER_MAP_API_KEY}`
+  );
+  return weather;
+}
+
+export async function forecastWeather(
+  location: string
+) {
+  const weather = axiosInstanceForWeather.get(
+    `/oncall?q=${location}&exclude=current,minutely,hourly,alerts&appid=${process.env.OPEN_WEATHER_MAP_API_KEY}`
   );
   return weather;
 }

@@ -1,13 +1,13 @@
 import {
   ErrorWithMessage,
   formatError,
-  weather,
+  currentWeather,
 } from "@/service/index.service";
 import { NextRequest, NextResponse } from "next/server";
 
 async function getWeather(location: string) {
   try {
-    const response = await weather(location);
+    const response = await currentWeather(location);
     return response?.data || null;
   } catch (error) {
     console.error("Weather API Error:", error);
